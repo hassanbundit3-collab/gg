@@ -32,21 +32,23 @@ public class BiomeCompassClient implements ClientModInitializer {
     public void onInitializeClient() {
         KeyMapping.Category category = KeyMapping.Category.register(BiomeCompass.id("main"));
         openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.biomecompass.open", InputConstants.Type.KEYSYM, InputConstants.KEY_B, category));
+                "key.biomecompass.open", InputConstants.Type.KEYBOARD, InputConstants.KEY_B, category));
 
         ClientPlayNetworking.registerGlobalReceiver(BiomeResultPayload.TYPE, (payload, context) -> {
             Minecraft mc = context.client();
             if (!payload.found()) {
                 target = null;
-                mc.gui.setOverlayMessage(Component.translatable("msg.biomecompass.not_found"), false);
+                mc.gui.hud.setOverlayMessage(Component.translatable("msg.biomecompass.not_found"), false);
                 return;
             }
             target = new BlockPos(payload.x(), payload.y(), payload.z());
             targetLevel = mc.level;
             targetName = BiomeSelectScreen.displayName(payload.biomeId());
             tickCounter = 0;
-            mc.gui.getChat().addMessage(Component.translatable("msg.biomecompass.located",
-                    targetName, payload.x(), payload.y(), payload.z()));
+            if (mc.player != null) {
+                mc.player.sendSystemMessage(Component.translatable("msg.biomecompass.located",
+                        targetName, payload.x(), payload.y(), payload.z()));
+            }
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(BiomeCompassClient::onTick);
@@ -54,15 +56,14 @@ public class BiomeCompassClient implements ClientModInitializer {
 
     private static void onTick(Minecraft mc) {
         while (openKey.consumeClick()) {
-            if (mc.level != null && mc.screen == null) {
-                mc.setScreen(new BiomeSelectScreen(collectBiomes(mc.level)));
+            if (mc.level != null && mc.gui.screen() == null) {
+                mc.gui.setScreen(new BiomeSelectScreen(collectBiomes(mc.level)));
             }
         }
         updateDirectionHint(mc);
     }
 
     private static List<String> collectBiomes(ClientLevel level) {
-        // Biomes are a synced dynamic registry, so biomes from other mods/datapacks are included.
         var registry = level.registryAccess().lookupOrThrow(Registries.BIOME);
         List<String> ids = new ArrayList<>();
         for (var id : registry.keySet()) {
@@ -76,7 +77,7 @@ public class BiomeCompassClient implements ClientModInitializer {
         if (target == null || mc.player == null || mc.level == null) {
             return;
         }
-        if (mc.level != targetLevel) { // changed dimension
+        if (mc.level != targetLevel) {
             target = null;
             return;
         }
@@ -90,18 +91,17 @@ public class BiomeCompassClient implements ClientModInitializer {
 
         if (dist < 16) {
             target = null;
-            mc.gui.setOverlayMessage(Component.translatable("msg.biomecompass.arrived"), false);
+            mc.gui.hud.setOverlayMessage(Component.translatable("msg.biomecompass.arrived"), false);
             return;
         }
 
-        // Minecraft yaw: 0 = south (+Z), 90 = west (-X).
         float targetYaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
         float rel = (targetYaw - mc.player.getYRot()) % 360f;
         if (rel > 180f) rel -= 360f;
         if (rel < -180f) rel += 360f;
         int index = Math.floorMod(Math.round(rel / 45f), 8);
 
-        mc.gui.setOverlayMessage(Component.translatable("msg.biomecompass.tracking",
+        mc.gui.hud.setOverlayMessage(Component.translatable("msg.biomecompass.tracking",
                 targetName, ARROWS[index], (int) dist), false);
     }
 }
