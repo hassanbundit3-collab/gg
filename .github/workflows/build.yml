@@ -21,6 +21,7 @@ jobs:
           gradle-version: 9.6.0
 
       - name: Build
+        working-directory: biome-compass
         run: gradle build --stacktrace
 
       - name: Upload jar
@@ -28,5 +29,5 @@ jobs:
         with:
           name: biome-compass
           path: |
-            build/libs/*.jar
-            !build/libs/*-sources.jar
+            biome-compass/build/libs/*.jar
+            !biome-compass/build/libs/*-sources.jar
