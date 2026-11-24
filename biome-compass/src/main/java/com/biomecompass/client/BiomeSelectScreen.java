@@ -39,7 +39,8 @@ public class BiomeSelectScreen extends Screen {
         int cx = this.width / 2;
         perPage = Math.max(3, Math.min(MAX_ROWS, (this.height - LIST_TOP - 34) / ROW_HEIGHT));
 
-        addRenderableWidget(new StringWidget(cx - 130, 8, 260, 9, this.title, this.font).alignCenter());
+        int titleWidth = this.font.width(this.title);
+        addRenderableWidget(new StringWidget(cx - titleWidth / 2, 8, titleWidth, 9, this.title, this.font));
 
         search = new EditBox(this.font, cx - 130, 22, 260, 20,
                 Component.translatable("screen.biomecompass.search"));
@@ -69,7 +70,7 @@ public class BiomeSelectScreen extends Screen {
                 Button.builder(Component.literal(">"), button -> changePage(1))
                         .bounds(cx + 90, bottom, 40, 20).build());
         pageLabel = addRenderableWidget(
-                new StringWidget(cx - 85, bottom + 6, 170, 9, Component.empty(), this.font).alignCenter());
+                new StringWidget(cx - 85, bottom + 6, 170, 9, Component.empty(), this.font));
 
         applyFilter();
     }
@@ -125,6 +126,7 @@ public class BiomeSelectScreen extends Screen {
         String ns = colon < 0 ? "minecraft" : id.substring(0, colon);
         String path = colon < 0 ? id : id.substring(colon + 1);
         String key = "biome." + ns + "." + path.replace('/', '.');
-        return I18n.exists(key) ? I18n.get(key) + " (" + id + ")" : id;
+        String translated = I18n.get(key);
+        return translated.equals(key) ? id : translated + " (" + id + ")";
     }
 }
