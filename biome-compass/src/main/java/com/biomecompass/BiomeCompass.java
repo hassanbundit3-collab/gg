@@ -24,8 +24,8 @@ public class BiomeCompass implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.playC2S().register(FindBiomePayload.TYPE, FindBiomePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(BiomeResultPayload.TYPE, BiomeResultPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(FindBiomePayload.TYPE, FindBiomePayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(BiomeResultPayload.TYPE, BiomeResultPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(FindBiomePayload.TYPE, BiomeCompass::handleFind);
     }
