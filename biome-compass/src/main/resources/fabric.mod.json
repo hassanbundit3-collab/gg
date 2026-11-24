@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "biomecompass",
+  "version": "${version}",
+  "name": "Biome Compass",
+  "description": "Find the nearest biome (including biomes added by other mods) and get an on-screen direction and distance.",
+  "authors": [],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.biomecompass.BiomeCompass"],
+    "client": ["com.biomecompass.client.BiomeCompassClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

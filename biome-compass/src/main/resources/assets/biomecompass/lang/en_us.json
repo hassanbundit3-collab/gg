@@ -1,0 +1,10 @@
+{
+  "key.biomecompass.open": "Open Biome Compass",
+  "key.category.biomecompass.main": "Biome Compass",
+  "screen.biomecompass.title": "Biome Compass",
+  "screen.biomecompass.search": "Search biome...",
+  "msg.biomecompass.not_found": "Biome not found within range in this dimension.",
+  "msg.biomecompass.located": "Nearest %s: %s, %s, %s",
+  "msg.biomecompass.tracking": "%s  %s  %s blocks",
+  "msg.biomecompass.arrived": "You have arrived at the biome area."
+}

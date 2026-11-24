@@ -1,0 +1,10 @@
+{
+  "key.biomecompass.open": "เปิด Biome Compass",
+  "key.category.biomecompass.main": "Biome Compass",
+  "screen.biomecompass.title": "Biome Compass",
+  "screen.biomecompass.search": "ค้นหาไบโอม...",
+  "msg.biomecompass.not_found": "ไม่พบไบโอมนี้ในระยะค้นหาของมิตินี้",
+  "msg.biomecompass.located": "%s ที่ใกล้ที่สุด: %s, %s, %s",
+  "msg.biomecompass.tracking": "%s  %s  %s บล็อก",
+  "msg.biomecompass.arrived": "ถึงพื้นที่ไบโอมแล้ว"
+}
